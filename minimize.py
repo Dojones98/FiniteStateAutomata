@@ -79,16 +79,41 @@ def nondistinguishable_pairs(nondist_table):
         for index_y, _ in enumerate(row):
             if nondist_table[index_x][index_y] == '_':
                 if index_x != index_y:
-                    add_it = (index_x, index_y)
+                    add_it = set()
+                    add_it.add(index_x)
+                    add_it.add(index_y)
                     nondist_pairs.append(add_it)
     print("Here are the nondistinct pairs: ")
-    print(nondist_pairs)
-    return nondist_pairs
+
+    nondist_pairs_2 = nondist_pairs
+    nondist_pairs_3 = nondist_pairs_2
+    #doing_work = True
+    #while doing_work:
+    for temp1 in nondist_pairs:
+        for temp2 in nondist_pairs:
+            if len(temp1.intersection(temp2)) > 0:
+                temp3 = temp1.union(temp2)
+                if temp3 not in nondist_pairs_2:
+                    nondist_pairs_2.append(temp3)
+                    nondist_pairs_2.remove(temp1)
+                    nondist_pairs_2.remove(temp2)
+        #if nondist_pairs_2 == nondist_pairs_3:
+         #   doing_work = False
+       # nondist_pairs_3 = nondist_pairs_2
+
+
+    print(nondist_pairs_2)
+
+    return nondist_pairs_2
+
+
+
 
 def minimize(nondist_pairs, transitions, alphabet, accepting_states):
-    for pair in nondist_pairs:
-        for elem in pair:
-            transitions.update({pair : transitions[str(elem)]})
+    """Here is your docstring"""
+    for pair1 in nondist_pairs:
+        for elem in pair1:
+            transitions.update({tuple(pair1) : transitions[str(elem)]})
     for pair in nondist_pairs:
         for elem in pair:
             if str(elem) in transitions:
