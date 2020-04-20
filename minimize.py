@@ -81,19 +81,20 @@ def nondistinguishable_pairs(nondist_table):
                 if index_x != index_y:
                     add_it = (index_x, index_y)
                     nondist_pairs.append(add_it)
+    print("Here are the nondistinct pairs: ")
+    print(nondist_pairs)
     return nondist_pairs
 
 def minimize(nondist_pairs, transitions, alphabet, accepting_states):
     for pair in nondist_pairs:
         for elem in pair:
-            transitions.update({pair : transitions[str(elem)]}) 
-    print(transitions)        
-
-        
-        
-
-
-
+            transitions.update({pair : transitions[str(elem)]})
+    for pair in nondist_pairs:
+        for elem in pair:
+            if str(elem) in transitions:
+                del transitions[str(elem)]
+    new_list = list(transitions.items())
+    print(new_list)
 
 if __name__ == "__main__":
     DFA_FILE = sys.argv[1]
@@ -110,4 +111,3 @@ if __name__ == "__main__":
     TABLE = nondistinguishable_table(TRANSITION_TABLE, NUMBER_OF_STATES, ACCEPTING_STATES, ALPHABET)
     PAIRS = nondistinguishable_pairs(TABLE)
     minimize(PAIRS, TRANSITION_TABLE, ALPHABET, ACCEPTING_STATES)
-
