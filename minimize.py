@@ -74,32 +74,40 @@ def nondistinguishable_table(trans_table, num_states, accepting_states, alphabet
 
 def nondistinguishable_pairs(nondist_table):
     """fuck you pylint"""
-    nondist_pairs = set()
+    nondist_pairs = list()
     for index_x, row in enumerate(nondist_table):
         for index_y, _ in enumerate(row):
             if nondist_table[index_x][index_y] == '_':
                 if index_x != index_y:
                     add_it = (index_x, index_y)
-                    #add_it.sort(key = lambda x: x[])
-                    nondist_pairs.add(add_it)
-    print("Printing from minimize")
-    print(nondist_pairs)
+                    nondist_pairs.append(add_it)
+    return nondist_pairs
+
+def minimize(nondist_pairs, transitions, alphabet, accepting_states):
+    for pair in nondist_pairs:
+        for elem in pair:
+            transitions.update({pair : transitions[str(elem)]}) 
+    print(transitions)        
+
+        
+        
+
+
 
 
 if __name__ == "__main__":
     DFA_FILE = sys.argv[1]
-    STRINGS_FILE = sys.argv[2]
 
     with open(DFA_FILE, 'r') as dfa_handle:
         DFA_DATA = dfa_handle.readlines()
         NUMBER_OF_STATES = int(DFA_DATA[0].split(':')[1])
         ACCEPTING_STATES = set(DFA_DATA[1].split(':')[1].split())
         ALPHABET = list(DFA_DATA[2].split(':')[1])[1:-1]
-    with open(STRINGS_FILE, 'r') as strings_handle:
-        STRINGS_DATA = strings_handle.readlines()
 
     TRANSITIONS = DFA_DATA[3:]
     TRANSITION_TABLE = build_table(ALPHABET, TRANSITIONS)
 
     TABLE = nondistinguishable_table(TRANSITION_TABLE, NUMBER_OF_STATES, ACCEPTING_STATES, ALPHABET)
-    nondistinguishable_pairs(TABLE)
+    PAIRS = nondistinguishable_pairs(TABLE)
+    minimize(PAIRS, TRANSITION_TABLE, ALPHABET, ACCEPTING_STATES)
+
