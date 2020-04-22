@@ -1,7 +1,6 @@
 """Description: This is a program that simulates a DFA from an input file that is a
-   description of that DFA and A file that contains strings that may or may not be
-   accepted by that DFA. It outputs whether or not the lines of the strings file
-   are accepted or rejected by the DFA."""
+   string. The generated DFA description accepts any word w where x (the string in the input file)
+   is a substring of w."""
 
 import sys
 
@@ -25,6 +24,8 @@ def build_table(alphabet, word):
     return outer_dict
 
 def print_dfa(alphabet, number_states, accepting_state, transition_table):
+    '''Print the Valid DFA description given all of the elements that make up
+        a DFA description.'''
     print(f"Number of states: {number_states}")
     print(f"Accpeting states: {accepting_state}")
     print(f"Alphabet: {alphabet}")
