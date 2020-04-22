@@ -1,6 +1,6 @@
 """Description: This is a program that minimizes a DFA from an input file that is a
    description of that DFA and outputs the distinguishibility table, the indistinguishable
-   pairs, and the sets of states with common transitions"""
+   pairs, the sets of states with common transitions, and the description of the minimized DFA."""
 
 import sys
 
@@ -80,8 +80,8 @@ def nondistinguishable_pairs(nondist_table):
             if nondist_table[index_x][index_y] == '_':
                 if index_x != index_y:
                     add_it = list()
-                    add_it.append(index_x)
-                    add_it.append(index_y)
+                    add_it.append(str(index_x))
+                    add_it.append(str(index_y))
                     nondist_pairs.append(add_it)
     print("\nHere are the nondistinct pairs: ")
     print(nondist_pairs)
@@ -118,6 +118,18 @@ def minimize(nondist_pairs, transitions, alphabet, accepting_states):
             if str(elem) in transitions:
                 del transitions[str(elem)]
     new_list = list(transitions.items())
+    for elem in new_list:
+        for char in alphabet:
+            for pair in nondist_pairs:
+                if elem[1][char] in pair:
+                    elem[1][char] = pair
+
+    print("\nHere is the DFA Description:")
+    print(f"Number of states: {len(new_list)}")
+    print(f"Accepting states: {accepting_states}")
+
+    for elem in new_list:
+        print(f"State: {elem[0]}        Transitions: {elem[1]}")
 
 if __name__ == "__main__":
     DFA_FILE = sys.argv[1]

@@ -89,9 +89,9 @@ The three sub-folders in this directory contain the completed code for the CSCE 
     You could also use run_minimize.sh with one additional command line argument (i.e. ./run_textsearch dfa.txt)
 
 ## Minimize output:
-    Minimize outputs the table of distinguishables, the non-distunguishable pairs of states, and the sets of states from the pairs of non-distinguishables that share common transitions.
+    Minimize outputs the table of distinguishables, the non-distunguishable pairs of states, the sets of states from the pairs of non-distinguishables that share common transitions, and a valid DFA description of the minimized DFA.
 
-    As defined by Professor Buell in lecture on 20 April 2020, the acceptable work completed for the "minimize" task was to output the sets of state that share common transitions rather than the entire DFA description of the minimized DFA as described by the Project Description PDF.
+    As defined by Professor Buell in lecture on 20 April 2020, the acceptable work completed for the "minimize" task was to output the sets of states that share common transitions rather than the entire DFA description of the minimized DFA as described by the Project Description PDF, However, I attempted to output a valid DFA description for a minimized DFA regardless.
 
 
 
