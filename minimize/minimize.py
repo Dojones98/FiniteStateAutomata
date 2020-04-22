@@ -79,35 +79,31 @@ def nondistinguishable_pairs(nondist_table):
         for index_y, _ in enumerate(row):
             if nondist_table[index_x][index_y] == '_':
                 if index_x != index_y:
-                    add_it = set()
-                    add_it.add(index_x)
-                    add_it.add(index_y)
+                    add_it = list()
+                    add_it.append(index_x)
+                    add_it.append(index_y)
                     nondist_pairs.append(add_it)
     print("Here are the nondistinct pairs: ")
 
-    nondist_pairs_2 = nondist_pairs
-    nondist_pairs_3 = nondist_pairs_2
-    #doing_work = True
-    #while doing_work:
-    for temp1 in nondist_pairs:
-        for temp2 in nondist_pairs:
-            if len(temp1.intersection(temp2)) > 0:
-                temp3 = temp1.union(temp2)
-                if temp3 not in nondist_pairs_2:
-                    nondist_pairs_2.append(temp3)
-                    nondist_pairs_2.remove(temp1)
-                    nondist_pairs_2.remove(temp2)
-        #if nondist_pairs_2 == nondist_pairs_3:
-         #   doing_work = False
-       # nondist_pairs_3 = nondist_pairs_2
+    common_states = []
+    while len(nondist_pairs) > 0:
+        first, *rest = nondist_pairs
+        first = set(first)
+        nondist_pairsf = -1
+        while len(first) > nondist_pairsf:
+            nondist_pairsf = len(first)
+            rest2 = []
+            for elem in rest:
+                if len(first.intersection(set(elem))) > 0:
+                    first |= set(elem)
+                else:
+                    rest2.append(elem)
+            rest = rest2
+        common_states.append(first)
+        nondist_pairs = rest
+    print(common_states)
 
-
-    print(nondist_pairs_2)
-
-    return nondist_pairs_2
-
-
-
+    return common_states
 
 def minimize(nondist_pairs, transitions, alphabet, accepting_states):
     """Here is your docstring"""
@@ -119,7 +115,7 @@ def minimize(nondist_pairs, transitions, alphabet, accepting_states):
             if str(elem) in transitions:
                 del transitions[str(elem)]
     new_list = list(transitions.items())
-    print(new_list)
+    #print(new_list)
 
 if __name__ == "__main__":
     DFA_FILE = sys.argv[1]
