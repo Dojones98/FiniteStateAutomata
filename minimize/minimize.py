@@ -39,7 +39,8 @@ def build_table(alphabet, trans):
     return outer_dict
 
 def nondistinguishable_helper(arr, trans_table, alphabet):
-    """Output the minimized DFA"""
+    """this function breaks up code to keep the nondistunguishable_table
+    function from being too long."""
     for index_x, row in enumerate(arr):
         for index_y, _ in enumerate(row):
             if arr[index_x][index_y] != 'X':
@@ -61,8 +62,8 @@ def nondistinguishable_table(trans_table, num_states, accepting_states, alphabet
                  (str(index_y) not in accepting_states)) or
                     ((str(index_x) not in accepting_states) and
                      (str(index_y) in accepting_states))) or
-               (index_x > index_y)):
-                arr[index_x][index_y] = 'X'
+               (index_x < index_y)):
+                arr[index_x][index_y] = 'X'    
     doing_work = True
     array_temp = arr
     while doing_work:
@@ -71,6 +72,13 @@ def nondistinguishable_table(trans_table, num_states, accepting_states, alphabet
             doing_work = False
         array_temp = arr
     return arr
+
+def print_nondist_table(table):
+    print("\nHere is the table of non-distinguishables:")
+    for row in table:
+        for column in row:
+            print(column, end=' ')    
+        print()    
 
 def nondistinguishable_pairs(nondist_table):
     """fuck you pylint"""
@@ -83,7 +91,8 @@ def nondistinguishable_pairs(nondist_table):
                     add_it.append(index_x)
                     add_it.append(index_y)
                     nondist_pairs.append(add_it)
-    print("Here are the nondistinct pairs: ")
+    print("\nHere are the nondistinct pairs: ")
+    print(nondist_pairs)
 
     common_states = []
     while len(nondist_pairs) > 0:
@@ -101,6 +110,7 @@ def nondistinguishable_pairs(nondist_table):
             rest = rest2
         common_states.append(first)
         nondist_pairs = rest
+    print("\nHere are the sets of equivalent states:")    
     print(common_states)
 
     return common_states
@@ -130,5 +140,6 @@ if __name__ == "__main__":
     TRANSITION_TABLE = build_table(ALPHABET, TRANSITIONS)
 
     TABLE = nondistinguishable_table(TRANSITION_TABLE, NUMBER_OF_STATES, ACCEPTING_STATES, ALPHABET)
+    print_nondist_table(TABLE)
     PAIRS = nondistinguishable_pairs(TABLE)
     minimize(PAIRS, TRANSITION_TABLE, ALPHABET, ACCEPTING_STATES)

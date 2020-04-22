@@ -1,6 +1,4 @@
-Build:
-Run: 
-    python3 simulate.py
+python3 simulate.py $@
 
 
 
