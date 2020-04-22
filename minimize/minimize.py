@@ -132,6 +132,10 @@ def minimize(nondist_pairs, transitions, alphabet, accepting_states):
         print(f"State: {elem[0]}        Transitions: {elem[1]}")
 
 if __name__ == "__main__":
+    if len(sys.argv) != 2:
+        print("Improperly formatted execution. Please run code in the following format: \n")
+        print("python3 minimize.py <dfa_input>\n")
+        sys.exit()
     DFA_FILE = sys.argv[1]
 
     with open(DFA_FILE, 'r') as dfa_handle:
