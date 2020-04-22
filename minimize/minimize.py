@@ -1,23 +1,11 @@
-"""Description: This is a program that simulates a DFA from an input file that is a
-   description of that DFA and A file that contains strings that may or may not be
-   accepted by that DFA. It outputs whether or not the lines of the strings file
-   are accepted or rejected by the DFA."""
+"""Description: This is a program that minimizes a DFA from an input file that is a
+   description of that DFA and outputs the distinguishibility table, the indistinguishable
+   pairs, and the sets of states with common transitions"""
 
 import sys
 
-# Input: a text string, a nested dictionary of transitions, the current state of the DFA
-# Output: the final state that a DFA is in given a transition table and a string
-# Description: This function uses recursion to read in every character of a string
-# and parse that through a given DFA to find out the last state the DFA is in
-
-def accept_or_reject_helper(string, transitions, current_state):
-    """Return the final state of a DFA after it goes through all of its transitions."""
-    char_to_use = string[0]
-    fixed = str(string[1:])
-    if char_to_use == '\n':
-        return current_state
-    next_state = transitions[current_state][char_to_use]
-    return accept_or_reject_helper(fixed, transitions, next_state)
+# Input: a character, a nested dictionary of transitions, the current state of the DFA
+# Output: the next state of the DFA
 
 def accept_or_reject_on_char(char, transitions, current_state):
     """helper"""
@@ -53,7 +41,8 @@ def nondistinguishable_helper(arr, trans_table, alphabet):
     return arr
 
 def nondistinguishable_table(trans_table, num_states, accepting_states, alphabet):
-    """Output the minimized DFA"""
+    """Create the distinguishibility table based on the Table of Distinguishibilities
+        algorithm for DFA minimization located on page 128 of the course-notes.pdf"""
     rows, cols = (num_states, num_states)
     arr = [['_' for i in range(cols)] for j in range(rows)]
     for index_x, row in enumerate(arr):
@@ -63,7 +52,7 @@ def nondistinguishable_table(trans_table, num_states, accepting_states, alphabet
                     ((str(index_x) not in accepting_states) and
                      (str(index_y) in accepting_states))) or
                (index_x < index_y)):
-                arr[index_x][index_y] = 'X'    
+                arr[index_x][index_y] = 'X'
     doing_work = True
     array_temp = arr
     while doing_work:
@@ -74,14 +63,17 @@ def nondistinguishable_table(trans_table, num_states, accepting_states, alphabet
     return arr
 
 def print_nondist_table(table):
+    '''Print the distinguishability table'''
     print("\nHere is the table of non-distinguishables:")
     for row in table:
         for column in row:
-            print(column, end=' ')    
-        print()    
+            print(column, end=' ')
+        print()
 
 def nondistinguishable_pairs(nondist_table):
-    """fuck you pylint"""
+    """Take the distinguishibility table and generate a list of non-
+        distinguishable pairs. From this list, combine non-distinguishable
+        pairs into sets of states that share common transitions."""
     nondist_pairs = list()
     for index_x, row in enumerate(nondist_table):
         for index_y, _ in enumerate(row):
@@ -110,13 +102,14 @@ def nondistinguishable_pairs(nondist_table):
             rest = rest2
         common_states.append(first)
         nondist_pairs = rest
-    print("\nHere are the sets of equivalent states:")    
+    print("\nHere are the sets of equivalent states:")
     print(common_states)
 
     return common_states
 
 def minimize(nondist_pairs, transitions, alphabet, accepting_states):
-    """Here is your docstring"""
+    """given the nondistinguishable pairs, the transition table, alphabet,
+        and accepting states, generate a valid minimized DFA."""
     for pair1 in nondist_pairs:
         for elem in pair1:
             transitions.update({tuple(pair1) : transitions[str(elem)]})
@@ -125,7 +118,6 @@ def minimize(nondist_pairs, transitions, alphabet, accepting_states):
             if str(elem) in transitions:
                 del transitions[str(elem)]
     new_list = list(transitions.items())
-    #print(new_list)
 
 if __name__ == "__main__":
     DFA_FILE = sys.argv[1]
