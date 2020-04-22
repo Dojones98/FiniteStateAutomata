@@ -35,6 +35,10 @@ def print_dfa(alphabet, number_states, accepting_state, transition_table):
         print()
 
 if __name__ == "__main__":
+    if len(sys.argv) != 2:
+        print("Improperly formatted execution. Please run code in the following format: \n")
+        print("python3 textsearch.py <inputfile>\n")
+        sys.exit()
     TEXT_FILE = sys.argv[1]
     ALPHABET = "abcdefghijklmnopqrstuvwxyz"
     ALPHABET_LENGTH = 26

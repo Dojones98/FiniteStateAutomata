@@ -1,1 +1,1 @@
-python3 textsearch.py text_input.txt
+python3 textsearch.py test.txt
